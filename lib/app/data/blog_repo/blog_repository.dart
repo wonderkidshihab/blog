@@ -15,4 +15,24 @@ class BlogRepository extends GetConnect {
       return blogs.map((e) => BlogModel.fromMap(e)).toList();
     }
   }
+
+  createBlog(
+      {required String title,
+      required String excerpt,
+      required String content,
+      required String status,
+      required String slug}) async {
+    final response = await post('posts', {
+      "title": title,
+      "excerpt": excerpt,
+      "content": content,
+      "status": status,
+      "slug": slug,
+    });
+    if (response.hasError) {
+      throw Exception(response.statusText);
+    } else {
+      return response.body;
+    }
+  }
 }
