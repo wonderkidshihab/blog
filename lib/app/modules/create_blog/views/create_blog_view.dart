@@ -1,3 +1,5 @@
+import 'package:blog/app/data/models/category_model.dart';
+import 'package:blog/app/modules/create_blog/controllers/categories_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -23,7 +25,6 @@ class CreateBlogView extends GetView<CreateBlogController> {
                   controller: controller.titleController,
                   decoration: const InputDecoration(
                     labelText: 'Title',
-                    border: OutlineInputBorder(),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -37,7 +38,6 @@ class CreateBlogView extends GetView<CreateBlogController> {
                   controller: controller.excerptController,
                   decoration: const InputDecoration(
                     labelText: 'Excerpt',
-                    border: OutlineInputBorder(),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -51,8 +51,9 @@ class CreateBlogView extends GetView<CreateBlogController> {
                   controller: controller.contentController,
                   decoration: const InputDecoration(
                     labelText: 'Content',
-                    border: OutlineInputBorder(),
                   ),
+                  maxLines: 10,
+                  maxLength: 1000,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter content';
@@ -61,30 +62,64 @@ class CreateBlogView extends GetView<CreateBlogController> {
                   },
                 ),
                 const SizedBox(height: 16),
+                GetBuilder<CategoriesController>(
+                    builder: (CategoriesController categoriesController) {
+                  return categoriesController.obx(
+                    (state) {
+                      return DropdownButtonFormField<CategoryModel>(
+                        value: controller.selectedCategory.value,
+                        onChanged: (value) {
+                          controller.selectedCategory.value = value;
+                        },
+                        items: state!
+                            .map((e) => DropdownMenuItem<CategoryModel>(
+                                  value: e,
+                                  child: Text(e.name),
+                                ))
+                            .toList(),
+                        decoration: const InputDecoration(
+                          labelText: 'Category',
+                        ),
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Please select category';
+                          }
+                          return null;
+                        },
+                      );
+                    },
+                    onError: (error) => Text(error.toString()),
+                    onEmpty: const Center(child: Text('No data found')),
+                    onLoading: const Center(child: CircularProgressIndicator()),
+                  );
+                }),
+                const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
                   value: controller.statusController,
-                  decoration: const InputDecoration(
-                    labelText: 'Status',
-                    border: OutlineInputBorder(),
-                  ),
                   onChanged: (value) {
                     controller.statusController = value!;
                   },
                   items: controller.statuses
-                      .map(
-                        (e) => DropdownMenuItem(
-                          value: e,
-                          child: Text(e),
-                        ),
-                      )
+                      .map((e) => DropdownMenuItem<String>(
+                            value: e,
+                            child: Text(e.capitalizeFirst!),
+                          ))
                       .toList(),
+                  decoration: const InputDecoration(
+                    labelText: 'Status',
+                  ),
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Please select status';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: controller.slugController,
                   decoration: const InputDecoration(
                     labelText: 'Slug',
-                    border: OutlineInputBorder(),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {

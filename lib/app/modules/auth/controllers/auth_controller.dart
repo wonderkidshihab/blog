@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:blog/app/data/blog_repo/auth_repo.dart';
+import 'package:blog/app/data/auth_repo/auth_repo.dart';
 import 'package:blog/app/services/shared_preferences_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,9 +37,9 @@ class AuthController extends GetxController
     var refresh = Get.find<SharedPreferencesService>().getString("refresh");
     if (access != null && refresh != null) {
       var response = await authRepository.refreshToken(refresh);
-      if (response.statusCode == 200) {
+      if (response != null) {
         Get.find<SharedPreferencesService>()
-            .setString("access", response.body['access']);
+            .setString("access", response['access']);
         change(true, status: RxStatus.success());
       } else {
         change(false, status: RxStatus.success());
@@ -55,16 +55,16 @@ class AuthController extends GetxController
         'password': passwordController.text,
       });
 
-      if (response.statusCode == 200) {
+      if (response != null) {
         change(true, status: RxStatus.success());
         Get.find<SharedPreferencesService>()
-            .setString("access", response.body['access']);
+            .setString("access", response['access']);
         Get.find<SharedPreferencesService>()
-            .setString("refresh", response.body['refresh']);
+            .setString("refresh", response['refresh']);
         stateReset();
         Get.offAllNamed('/home');
       } else {
-        errorLogin.value = response.body['detail'];
+        errorLogin.value = response['detail'];
         change(false, status: RxStatus.success());
       }
     } on Exception {
@@ -80,12 +80,12 @@ class AuthController extends GetxController
         'email': emailController.text,
         'password': passwordController.text,
       });
-      log(response.body.toString(), name: 'AuthController.register');
+      log(response.toString(), name: 'AuthController.register');
 
-      if (response.statusCode == 200) {
+      if (response != null) {
         login();
       } else {
-        errorRegistration.value = response.body['detail'];
+        errorRegistration.value = response['detail'];
         change(false, status: RxStatus.success());
       }
     } on Exception {

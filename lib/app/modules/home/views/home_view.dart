@@ -1,4 +1,8 @@
 import 'package:blog/app/modules/auth/controllers/auth_controller.dart';
+import 'package:blog/app/modules/home/sections/categories_section.dart';
+import 'package:blog/app/modules/home/sections/create_blog_button.dart';
+import 'package:blog/app/modules/home/sections/filter_bottomsheet.dart';
+import 'package:blog/app/modules/home/sections/posts_section.dart';
 import 'package:blog/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +18,14 @@ class HomeView extends GetView<HomeController> {
         title: const Text('HomeView'),
         centerTitle: true,
         actions: [
+          OutlinedButton.icon(
+            onPressed: () {
+              Get.bottomSheet(const FilterBottomsheet());
+            },
+            icon: const Icon(Icons.filter_alt_outlined),
+            label: const Text('Filter'),
+          ),
+          const SizedBox(width: 10),
           GetBuilder<AuthController>(
             builder: (controller) {
               return controller.obx(
@@ -39,37 +51,15 @@ class HomeView extends GetView<HomeController> {
           ),
         ],
       ),
-      body: controller.obx(
-        (state) => ListView.separated(
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(state[index].title ?? 'No title found'),
-              subtitle: Text(state[index].excerpt ?? 'No excerpt found'),
-            );
-          },
-          itemCount: state!.length,
-          separatorBuilder: (context, index) => const Divider(),
-        ),
-        onError: (error) => Text(error.toString()),
-        onEmpty: const Center(child: Text('No data found')),
-        onLoading: const Center(child: CircularProgressIndicator()),
+      body: const Column(
+        children: [
+          SizedBox(height: 20),
+          CategoriesSection(),
+          SizedBox(height: 20),
+          PostsSection(),
+        ],
       ),
-      floatingActionButton: GetBuilder<AuthController>(
-        builder: (controller) {
-          return controller.obx(
-            (state) {
-              return state == true
-                  ? FloatingActionButton(
-                      onPressed: () {
-                        Get.toNamed(Routes.CREATE_BLOG);
-                      },
-                      child: const Icon(Icons.add),
-                    )
-                  : const SizedBox.shrink();
-            },
-          );
-        },
-      ),
+      floatingActionButton: const CreateBlogButton(),
     );
   }
 }

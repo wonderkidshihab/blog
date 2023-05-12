@@ -1,16 +1,20 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:blog/app/data/models/category_model.dart';
+import 'package:blog/app/data/models/profile_model.dart';
+
 class BlogModel {
           // fields = ["id", "title", "author", "excerpt", "content", "status", "slug", "category"]
   final int? id;
   final String? title;
-  final String? author;
+  final ProfileModel? author;
   final String? excerpt;
   final String? content;
   final String? status;
   final String? slug;
-  final String? category;
+  final CategoryModel? category;
+  final DateTime? published;
   BlogModel({
     this.id,
     this.title,
@@ -20,18 +24,20 @@ class BlogModel {
     this.status,
     this.slug,
     this.category,
+    this.published,
   });
   
 
   BlogModel copyWith({
     int? id,
     String? title,
-    String? author,
+    ProfileModel? author,
     String? excerpt,
     String? content,
     String? status,
     String? slug,
-    String? category,
+    CategoryModel? category,
+    DateTime? published,
   }) {
     return BlogModel(
       id: id ?? this.id,
@@ -42,6 +48,7 @@ class BlogModel {
       status: status ?? this.status,
       slug: slug ?? this.slug,
       category: category ?? this.category,
+      published: published ?? this.published,
     );
   }
 
@@ -49,12 +56,13 @@ class BlogModel {
     return <String, dynamic>{
       'id': id,
       'title': title,
-      'author': author,
+      'author': author?.toJson(),
       'excerpt': excerpt,
       'content': content,
       'status': status,
       'slug': slug,
       'category': category,
+      'published': published?.toIso8601String(),
     };
   }
 
@@ -62,12 +70,13 @@ class BlogModel {
     return BlogModel(
       id: map['id'] != null ? map['id'] as int : null,
       title: map['title'] != null ? map['title'] as String : null,
-      author: map['author'] != null ? map['author'] as String : null,
+      author: map['author'] != null ? ProfileModel.fromMap(map['author']) : null,
       excerpt: map['excerpt'] != null ? map['excerpt'] as String : null,
       content: map['content'] != null ? map['content'] as String : null,
       status: map['status'] != null ? map['status'] as String : null,
       slug: map['slug'] != null ? map['slug'] as String : null,
-      category: map['category'] != null ? map['category'] as String : null,
+      category: map['category'] != null ? CategoryModel.fromMap(map['category']) : null,
+      published: map['published'] != null ? DateTime.tryParse(map['published'] as String) : null,
     );
   }
 
