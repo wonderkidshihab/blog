@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SharedPreferencesService extends GetxService{
+class SharedPreferencesService extends GetxService {
   static SharedPreferencesService get to => Get.find();
   late SharedPreferences _sharedPreferences;
   Future<SharedPreferencesService> init() async {
@@ -27,5 +27,9 @@ class SharedPreferencesService extends GetxService{
 
   Future<bool> setInt(String key, int value) async {
     return await _sharedPreferences.setInt(key, value);
+  }
+
+  Future<bool> remove(String key) async {
+    return await _sharedPreferences.remove(key);
   }
 }

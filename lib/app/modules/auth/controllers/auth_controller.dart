@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:blog/app/data/blog_repo/auth_repo.dart';
 import 'package:blog/app/services/shared_preferences_service.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -30,11 +31,21 @@ class AuthController extends GetxController
   }
 
   @override
-  void onReady()async{
+  void onReady() async {
     super.onReady();
+    var access = Get.find<SharedPreferencesService>().getString("access");
+    var refresh = Get.find<SharedPreferencesService>().getString("refresh");
+    if (access != null && refresh != null) {
+      var response = await authRepository.refreshToken(refresh);
+      if (response.statusCode == 200) {
+        Get.find<SharedPreferencesService>()
+            .setString("access", response.body['access']);
+        change(true, status: RxStatus.success());
+      } else {
+        change(false, status: RxStatus.success());
+      }
+    }
   }
-
-
 
   Future<void> login() async {
     change(null, status: RxStatus.loading());
@@ -46,8 +57,11 @@ class AuthController extends GetxController
 
       if (response.statusCode == 200) {
         change(true, status: RxStatus.success());
-        Get.find<SharedPreferencesService>().setString("access", response.body['access']);
-        Get.find<SharedPreferencesService>().setString("refresh", response.body['refresh']);
+        Get.find<SharedPreferencesService>()
+            .setString("access", response.body['access']);
+        Get.find<SharedPreferencesService>()
+            .setString("refresh", response.body['refresh']);
+        stateReset();
         Get.offAllNamed('/home');
       } else {
         errorLogin.value = response.body['detail'];
@@ -77,5 +91,43 @@ class AuthController extends GetxController
     } on Exception {
       change(false, status: RxStatus.success());
     }
+  }
+
+  void logout() async {
+    var result = await Get.dialog(
+      CupertinoAlertDialog(
+        title: const Text("Logout"),
+        content: const Text("Are you sure you want to logout?"),
+        actions: [
+          CupertinoDialogAction(
+            child: const Text("Cancel"),
+            onPressed: () {
+              Get.back(result: false);
+            },
+          ),
+          CupertinoDialogAction(
+            isDestructiveAction: true,
+            onPressed: () {
+              Get.back(result: true);
+            },
+            child: const Text("Logout"),
+          ),
+        ],
+      ),
+    );
+    if (result == null || result == false) return;
+    await Get.find<SharedPreferencesService>().remove("access");
+    await Get.find<SharedPreferencesService>().remove("refresh");
+    change(false, status: RxStatus.success());
+  }
+
+  /// Resets the state of the controllers and removes the errors
+  void stateReset() {
+    usernameController.clear();
+    passwordController.clear();
+    emailController.clear();
+    confirmPasswordController.clear();
+    errorLogin.value = null;
+    errorRegistration.value = null;
   }
 }

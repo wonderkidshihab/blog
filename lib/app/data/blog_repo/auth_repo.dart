@@ -8,7 +8,6 @@ class AuthRepository extends GetConnect {
     httpClient.defaultContentType = 'application/json';
   }
 
-  
   Future<Response> login(Map<String, dynamic> data) =>
       post('/login/', jsonEncode(data));
   Future<Response> register(Map<String, dynamic> data) =>
@@ -16,5 +15,7 @@ class AuthRepository extends GetConnect {
   Future<Response> logout() => get('/logout/');
   Future<Response> me() => get('/me/');
 
-  
+  Future<Response> refreshToken(String refresh) {
+    return post('/token/refresh/', {'refresh': refresh});
+  }
 }

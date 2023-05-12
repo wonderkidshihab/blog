@@ -1,3 +1,4 @@
+import 'package:blog/app/modules/auth/controllers/auth_controller.dart';
 import 'package:blog/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,12 +14,28 @@ class HomeView extends GetView<HomeController> {
         title: const Text('HomeView'),
         centerTitle: true,
         actions: [
-          ElevatedButton.icon(
-            onPressed: () {
-              Get.toNamed(Routes.AUTH);
+          GetBuilder<AuthController>(
+            builder: (controller) {
+              return controller.obx(
+                (state) {
+                  return state == true
+                      ? ElevatedButton.icon(
+                          onPressed: () {
+                            controller.logout();
+                          },
+                          icon: const Icon(Icons.logout),
+                          label: const Text('Logout'),
+                        )
+                      : ElevatedButton.icon(
+                          onPressed: () {
+                            Get.toNamed(Routes.AUTH);
+                          },
+                          icon: const Icon(Icons.login),
+                          label: const Text('Login'),
+                        );
+                },
+              );
             },
-            icon: const Icon(Icons.login),
-            label: const Text('Login'),
           ),
         ],
       ),
