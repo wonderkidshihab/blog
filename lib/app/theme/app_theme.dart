@@ -1,68 +1,146 @@
+import 'package:blog/app/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  static ThemeData theme() {
+  static themeData() {
     return ThemeData(
-      useMaterial3: true,
-      scaffoldBackgroundColor: const Color.fromARGB(255, 32, 32, 32),
-      colorScheme: const ColorScheme.light(
-        primary: Color(0xFF6200EE),
-        secondary: Color(0xFF03DAC6),
-        surface: Color(0xFF121212),
-        background: Color(0xFF121212),
-        error: Color(0xFFB00020),
-        onPrimary: Color(0xFFFFFFFF),
-        onSecondary: Color(0xFF000000),
-        onSurface: Color(0xFFFFFFFF),
-        onBackground: Color(0xFFFFFFFF),
-        onError: Color(0xFFFFFFFF),
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: AppColors.primaryColor,
         brightness: Brightness.light,
+        secondary: AppColors.secondaryColor,
+        primary: AppColors.primaryColor,
+      ),
+      fontFamily: 'Space Grotesk',
+      useMaterial3: true,
+      // All text should be bold
+      textTheme: GoogleFonts.spaceGroteskTextTheme(
+        const TextTheme(
+          displayLarge: TextStyle(
+            fontSize: 96,
+            fontWeight: FontWeight.w700,
+            letterSpacing: -1.5,
+          ),
+          displayMedium: TextStyle(
+            fontSize: 60,
+            fontWeight: FontWeight.w700,
+            letterSpacing: -0.5,
+          ),
+          displaySmall: TextStyle(
+            fontSize: 48,
+            fontWeight: FontWeight.w700,
+          ),
+          headlineMedium: TextStyle(
+            fontSize: 34,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.25,
+          ),
+          headlineSmall: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
+          ),
+          titleLarge: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.15,
+          ),
+          titleMedium: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.15,
+          ),
+          titleSmall: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.1,
+          ),
+          bodyLarge: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.5,
+          ),
+          bodyMedium: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.25,
+          ),
+          labelLarge: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 1.25,
+          ),
+          bodySmall: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.4,
+          ),
+          labelSmall: TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 1.5,
+          ),
+        ),
       ),
       appBarTheme: const AppBarTheme(
-        backgroundColor: Color(0xFF121212),
-        foregroundColor: Color(0xFFFFFFFF),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
         titleTextStyle: TextStyle(
-          color: Color(0xFFFFFFFF),
+          color: AppColors.dark,
           fontSize: 20,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w600,
         ),
       ),
-      inputDecorationTheme: const InputDecorationTheme(
-        border: InputBorder.none,
-        enabledBorder: InputBorder.none,
-        focusedBorder: InputBorder.none,
-        errorBorder: InputBorder.none,
-        disabledBorder: InputBorder.none,
+      scaffoldBackgroundColor: AppColors.light,
+      buttonTheme: ButtonThemeData(
+        buttonColor: AppColors.primaryColor,
+        textTheme: ButtonTextTheme.primary,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        fillColor: AppColors.light,
         filled: true,
-        fillColor: Color(0xFF121212),
-        labelStyle: TextStyle(
-          color: Color(0xFFB00020),
+        alignLabelWithHint: true,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(
+            color: AppColors.lightGrey,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(
+            color: AppColors.lightGrey,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(
+            color: AppColors.lightGrey,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(
+            color: AppColors.lightGrey,
+          ),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(
+            color: AppColors.lightGrey,
+          ),
+        ),
+        errorStyle: const TextStyle(
+          color: AppColors.error,
+        ),
+        labelStyle: const TextStyle(
+          color: AppColors.dark,
         ),
         hintStyle: TextStyle(
-          color: Color(0xFFB00020),
-        ),
-        alignLabelWithHint: true,
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          foregroundColor: const Color(0xFFFFFFFF),
-          backgroundColor: const Color(0xFF6200EE),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
-      ),
-      textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(
-          foregroundColor: const Color(0xFF6200EE),
-        ),
-      ),
-      outlinedButtonTheme: OutlinedButtonThemeData(
-        style: OutlinedButton.styleFrom(
-          foregroundColor: const Color(0xFF6200EE),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          color: AppColors.dark.withOpacity(0.5),
         ),
       ),
     );

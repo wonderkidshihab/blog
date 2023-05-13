@@ -15,6 +15,14 @@ class PostsSection extends GetView<HomeController> {
               title: Text(state[index].title ?? 'No title found'),
               subtitle: Text(state[index].excerpt ?? 'No excerpt found'),
               trailing: Text(state[index].published.toString()),
+              onTap: () {
+                Get.toNamed(
+                  '/blog-details',
+                  parameters: {
+                    'id': state[index].id.toString(),
+                  },
+                );
+              },
             );
           },
           itemCount: state!.length,

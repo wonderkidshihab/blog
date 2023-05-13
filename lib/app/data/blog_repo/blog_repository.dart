@@ -33,4 +33,13 @@ class BlogRepository {
       return response;
     }
   }
+
+  getBlog({required int id})async {
+    final response = await ApiClient.instance.get(url: 'posts/$id/');
+    if (response == null) {
+      throw Exception("Error fetching blog");
+    } else {
+      return BlogModel.fromMap(response);
+    }
+  }
 }
