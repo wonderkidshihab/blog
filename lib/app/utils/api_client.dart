@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
@@ -53,43 +54,43 @@ class ApiClient {
     }));
   }
 
-  Future get({required String url, Map<String, dynamic>? params}) async {
+  Future<({String? error, dynamic result})> get({required String url, Map<String, dynamic>? params}) async {
     try {
       final response = await dio.get(url, queryParameters: params);
-      return response.data;
-    } on DioError {
-      return null;
+      return (error: null, result: response.data);
+    } on DioError catch (e){
+      return (error: e.response?.data["detail"].toString(), result: null);
     }
   }
 
-  Future post({required String url, Map<String, dynamic>? body}) async {
+  Future<({String? error, dynamic result})> post({required String url, Map<String, dynamic>? body}) async {
     try {
       final response = await dio.post(url, data: body);
-      return response.data;
-    } on DioError {
-      return null;
+      return (error: null, result: response.data);
+    } on DioError catch (e){
+      return (error: e.response?.data["detail"].toString(), result: null);
     }
   }
 
-  Future put({required String url, Map<String, dynamic>? body}) async {
+  Future<({String? error, dynamic result})> put({required String url, Map<String, dynamic>? body}) async {
     try {
       final response = await dio.put(url, data: body);
-      return response.data;
-    } on DioError {
-      return null;
+      return (error: null, result: response.data);
+    } on DioError catch (e){
+      return (error: e.response?.data["detail"].toString(), result: null);
     }
   }
 
-  Future delete({required String url, Map<String, dynamic>? body}) async {
+  Future<({String? error, dynamic result})> delete({required String url, Map<String, dynamic>? body}) async {
     try {
       final response = await dio.delete(url, data: body);
-      return response.data;
-    } on DioError {
-      return null;
+      return (error: null, result: response.data);
+    } on DioError catch (e){
+      return (error: e.response?.data["detail"].toString(), result: null);
     }
   }
 
-  Future requestWithFile(
+  Future<({String? error, dynamic result})> requestWithFile(
       {required String url,
       Map<String, dynamic>? body,
       required List<MapEntry<String, File>> files}) async {
@@ -108,10 +109,10 @@ class ApiClient {
       }
 
       final response = await dio.post(url, data: formData);
-      return response.data;
+      return (error: null, result: response.data);
     } on DioError catch (e) {
       log(e.toString(), name: "FIle up");
-      return null;
+      return (error: e.response?.data["detail"].toString(), result: null);
     }
   }
 }
@@ -143,35 +144,44 @@ class ApiClientWithoutAuth {
     }
   }
 
-  Future post({required String url, Map<String, dynamic>? body}) async {
+  // Future post({required String url, Map<String, dynamic>? body}) async {
+  //   try {
+  //     final response = await dio.post(url, data: body);
+  //     return response.data;
+  //   } on DioError catch (e) {
+  //     log(e.toString(), name: "Error");
+  //     return null;
+  //   }
+  // }
+
+  Future<({String? error, dynamic result})> post({required String url, Map<String, dynamic>? body}) async {
     try {
       final response = await dio.post(url, data: body);
-      return response.data;
-    } on DioError catch (e) {
-      log(e.toString(), name: "Error");
-      return null;
+      return (error: null, result: response.data);
+    } on DioError catch (e){
+      return (error: e.response?.data["detail"].toString(), result: null);
     }
   }
 
-  Future put({required String url, Map<String, dynamic>? body}) async {
+  Future<({String? error, dynamic result})> put({required String url, Map<String, dynamic>? body}) async {
     try {
       final response = await dio.put(url, data: body);
-      return response.data;
-    } on DioError {
-      return null;
+      return (error: null, result: response.data);
+    } on DioError catch (e){
+      return (error: e.response?.data["detail"].toString(), result: null);
     }
   }
 
-  Future delete({required String url, Map<String, dynamic>? body}) async {
+  Future<({String? error, dynamic result})> delete({required String url, Map<String, dynamic>? body}) async {
     try {
       final response = await dio.delete(url, data: body);
-      return response.data;
-    } on DioError {
-      return null;
+      return (error: null, result: response.data);
+    } on DioError catch (e){
+      return (error: e.response?.data["detail"].toString(), result: null);
     }
   }
 
-  Future requestWithFile(
+  Future<({String? error, dynamic result})> requestWithFile(
       {required String url,
       Map<String, dynamic>? body,
       required List<MapEntry<String, File>> files}) async {
@@ -190,10 +200,10 @@ class ApiClientWithoutAuth {
       }
 
       final response = await dio.post(url, data: formData);
-      return response.data;
+      return (error: null, result: response.data);
     } on DioError catch (e) {
       log(e.toString(), name: "FIle up");
-      return null;
+      return (error: e.response?.data["detail"].toString(), result: null);
     }
   }
 }

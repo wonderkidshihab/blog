@@ -1,14 +1,22 @@
 import 'package:blog/app/data/models/blog_model.dart';
+import 'package:blog/app/data/models/pagination_model.dart';
 import 'package:blog/app/utils/api_client.dart';
 
 class BlogRepository {
-  Future<List<BlogModel>> getBlogs({required Map<String, dynamic> queryParams}) async {
-    final response = await ApiClient.instance.get(url: 'posts/', params: queryParams);
-    if (response == null) {
-      throw Exception("Error fetching blogs");
+  Future<({List<BlogModel> blogs, PaginationModel pagination})> getBlogs(
+      {required Map<String, dynamic> queryParams}) async {
+    final response =
+        await ApiClient.instance.get(url: 'posts/', params: queryParams);
+    if (response.error != null) {
+      throw Exception(response.error);
     } else {
-      final blogs = response as List;
-      return blogs.map((e) => BlogModel.fromMap(e)).toList();
+      final blogs = response.result['results'] as List;
+      return (
+        blogs: blogs.map((e) => BlogModel.fromMap(e)).toList(),
+        pagination: PaginationModel.fromMap(
+          response.result['pagination'],
+        ),
+      );
     }
   }
 
@@ -27,19 +35,19 @@ class BlogRepository {
       'slug': slug,
       'category': category,
     });
-    if (response == null) {
-      throw Exception("Error creating blog");
+    if (response.error != null) {
+      throw Exception(response.error);
     } else {
-      return response;
+      return response.result;
     }
   }
 
-  getBlog({required int id})async {
+  getBlog({required int id}) async {
     final response = await ApiClient.instance.get(url: 'posts/$id/');
-    if (response == null) {
-      throw Exception("Error fetching blog");
+    if (response.error != null) {
+      throw Exception(response.error);
     } else {
-      return BlogModel.fromMap(response);
+      return BlogModel.fromMap(response.result);
     }
   }
 }
