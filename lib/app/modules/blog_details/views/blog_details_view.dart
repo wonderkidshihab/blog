@@ -15,11 +15,31 @@ class BlogDetailsView extends GetView<BlogDetailsController> {
       body: controller.obx(
         (state) {
           return ListView(
+            padding: const EdgeInsets.all(10),
             children: [
-              Text(
-                state!.title!,
-                style: Theme.of(context).textTheme.bodyMedium,
+              Image.network(
+                state!.thumbnail ??
+                    'https://via.placeholder.com/150x150.png?text=No+Image',
+                fit: BoxFit.cover,
+                height: 300,
+                width: double.infinity,
               ),
+              const SizedBox(height: 10),
+              Text(
+                state.title!,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 10),
+              Text(
+                'By ${state.author!.username} on ${state.published!.toString().substring(0, 10)} at ${'${state.published!.toString().substring(11, 16)} UTC'}',
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withOpacity(0.5),
+                    ),
+              ),
+              const SizedBox(height: 10),
               Text(
                 state.content!.replaceAll(RegExp(r'<[^>]*>|&[^;]+;'), ''),
                 style: Theme.of(context).textTheme.bodySmall,

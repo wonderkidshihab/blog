@@ -15,6 +15,12 @@ class PostsSection extends GetView<HomeController> {
               title: Text(state[index].title ?? 'No title found'),
               subtitle: Text(state[index].excerpt ?? 'No excerpt found'),
               trailing: Text(state[index].published.toString()),
+              leading: CircleAvatar(
+                backgroundImage: NetworkImage(
+                  state[index].thumbnail ??
+                      'https://via.placeholder.com/150x150.png?text=No+Image',
+                ),
+              ),
               onTap: () {
                 Get.toNamed(
                   '/blog-details',

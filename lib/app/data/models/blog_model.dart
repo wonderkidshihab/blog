@@ -5,7 +5,6 @@ import 'package:blog/app/data/models/category_model.dart';
 import 'package:blog/app/data/models/profile_model.dart';
 
 class BlogModel {
-          // fields = ["id", "title", "author", "excerpt", "content", "status", "slug", "category"]
   final int? id;
   final String? title;
   final ProfileModel? author;
@@ -15,6 +14,7 @@ class BlogModel {
   final String? slug;
   final CategoryModel? category;
   final DateTime? published;
+  final String? thumbnail;
   BlogModel({
     this.id,
     this.title,
@@ -25,8 +25,8 @@ class BlogModel {
     this.slug,
     this.category,
     this.published,
+    this.thumbnail,
   });
-  
 
   BlogModel copyWith({
     int? id,
@@ -38,6 +38,7 @@ class BlogModel {
     String? slug,
     CategoryModel? category,
     DateTime? published,
+    String? thumbnail,
   }) {
     return BlogModel(
       id: id ?? this.id,
@@ -49,6 +50,7 @@ class BlogModel {
       slug: slug ?? this.slug,
       category: category ?? this.category,
       published: published ?? this.published,
+      thumbnail: thumbnail ?? this.thumbnail,
     );
   }
 
@@ -56,13 +58,14 @@ class BlogModel {
     return <String, dynamic>{
       'id': id,
       'title': title,
-      'author': author?.toJson(),
+      'author': author?.toMap(),
       'excerpt': excerpt,
       'content': content,
       'status': status,
       'slug': slug,
-      'category': category,
-      'published': published?.toIso8601String(),
+      'category': category?.toMap(),
+      'published': published?.millisecondsSinceEpoch,
+      'thumbnail': thumbnail,
     };
   }
 
@@ -70,49 +73,59 @@ class BlogModel {
     return BlogModel(
       id: map['id'] != null ? map['id'] as int : null,
       title: map['title'] != null ? map['title'] as String : null,
-      author: map['author'] != null ? ProfileModel.fromMap(map['author']) : null,
+      author: map['author'] != null
+          ? ProfileModel.fromMap(map['author'] as Map<String, dynamic>)
+          : null,
       excerpt: map['excerpt'] != null ? map['excerpt'] as String : null,
       content: map['content'] != null ? map['content'] as String : null,
       status: map['status'] != null ? map['status'] as String : null,
       slug: map['slug'] != null ? map['slug'] as String : null,
-      category: map['category'] != null ? CategoryModel.fromMap(map['category']) : null,
-      published: map['published'] != null ? DateTime.tryParse(map['published'] as String) : null,
+      category: map['category'] != null
+          ? CategoryModel.fromMap(map['category'] as Map<String, dynamic>)
+          : null,
+      published:
+          map['published'] != null ? DateTime.tryParse(map['published']) : null,
+      thumbnail: map['thumbnail'] != null ? map['thumbnail'] as String : null,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory BlogModel.fromJson(String source) => BlogModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory BlogModel.fromJson(String source) =>
+      BlogModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'BlogModel(id: $id, title: $title, author: $author, excerpt: $excerpt, content: $content, status: $status, slug: $slug, category: $category)';
+    return 'BlogModel(id: $id, title: $title, author: $author, excerpt: $excerpt, content: $content, status: $status, slug: $slug, category: $category, published: $published, thumbnail: $thumbnail)';
   }
 
   @override
   bool operator ==(covariant BlogModel other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.id == id &&
-      other.title == title &&
-      other.author == author &&
-      other.excerpt == excerpt &&
-      other.content == content &&
-      other.status == status &&
-      other.slug == slug &&
-      other.category == category;
+
+    return other.id == id &&
+        other.title == title &&
+        other.author == author &&
+        other.excerpt == excerpt &&
+        other.content == content &&
+        other.status == status &&
+        other.slug == slug &&
+        other.category == category &&
+        other.published == published &&
+        other.thumbnail == thumbnail;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      title.hashCode ^
-      author.hashCode ^
-      excerpt.hashCode ^
-      content.hashCode ^
-      status.hashCode ^
-      slug.hashCode ^
-      category.hashCode;
+        title.hashCode ^
+        author.hashCode ^
+        excerpt.hashCode ^
+        content.hashCode ^
+        status.hashCode ^
+        slug.hashCode ^
+        category.hashCode ^
+        published.hashCode ^
+        thumbnail.hashCode;
   }
 }
