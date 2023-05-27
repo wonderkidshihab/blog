@@ -50,43 +50,59 @@ class ApiClient {
     }, onError: (DioError e, handler) {
       log(e.toString(), name: "Error");
       log(e.response?.data.toString() ?? "", name: "Error Data");
-      return handler.next(e);
+      throw e;
     }));
   }
 
-  Future<({String? error, dynamic result})> get({required String url, Map<String, dynamic>? params}) async {
+  Future<({String? error, dynamic result})> get(
+      {required String url, Map<String, dynamic>? params}) async {
     try {
       final response = await dio.get(url, queryParameters: params);
       return (error: null, result: response.data);
-    } on DioError catch (e){
-      return (error: e.response?.data["detail"].toString(), result: null);
+    } on DioError catch (e) {
+      return (
+        error: e.response?.data["detail"].toString() ?? "Something went wrong",
+        result: null
+      );
     }
   }
 
-  Future<({String? error, dynamic result})> post({required String url, Map<String, dynamic>? body}) async {
+  Future<({String? error, dynamic result})> post(
+      {required String url, Map<String, dynamic>? body}) async {
     try {
       final response = await dio.post(url, data: body);
       return (error: null, result: response.data);
-    } on DioError catch (e){
-      return (error: e.response?.data["detail"].toString(), result: null);
+    } on DioError catch (e) {
+      return (
+        error: e.response?.data["detail"].toString() ?? "Something went wrong",
+        result: null
+      );
     }
   }
 
-  Future<({String? error, dynamic result})> put({required String url, Map<String, dynamic>? body}) async {
+  Future<({String? error, dynamic result})> put(
+      {required String url, Map<String, dynamic>? body}) async {
     try {
       final response = await dio.put(url, data: body);
       return (error: null, result: response.data);
-    } on DioError catch (e){
-      return (error: e.response?.data["detail"].toString(), result: null);
+    } on DioError catch (e) {
+      return (
+        error: e.response?.data["detail"].toString() ?? "Something went wrong",
+        result: null
+      );
     }
   }
 
-  Future<({String? error, dynamic result})> delete({required String url, Map<String, dynamic>? body}) async {
+  Future<({String? error, dynamic result})> delete(
+      {required String url, Map<String, dynamic>? body}) async {
     try {
       final response = await dio.delete(url, data: body);
       return (error: null, result: response.data);
-    } on DioError catch (e){
-      return (error: e.response?.data["detail"].toString(), result: null);
+    } on DioError catch (e) {
+      return (
+        error: e.response?.data["detail"].toString() ?? "Something went wrong",
+        result: null
+      );
     }
   }
 
@@ -112,7 +128,10 @@ class ApiClient {
       return (error: null, result: response.data);
     } on DioError catch (e) {
       log(e.toString(), name: "FIle up");
-      return (error: e.response?.data["detail"].toString(), result: null);
+      return (
+        error: e.response?.data["detail"].toString() ?? "Something went wrong",
+        result: null
+      );
     }
   }
 }
@@ -144,40 +163,42 @@ class ApiClientWithoutAuth {
     }
   }
 
-  // Future post({required String url, Map<String, dynamic>? body}) async {
-  //   try {
-  //     final response = await dio.post(url, data: body);
-  //     return response.data;
-  //   } on DioError catch (e) {
-  //     log(e.toString(), name: "Error");
-  //     return null;
-  //   }
-  // }
-
-  Future<({String? error, dynamic result})> post({required String url, Map<String, dynamic>? body}) async {
+  Future<({String? error, dynamic result})> post(
+      {required String url, Map<String, dynamic>? body}) async {
     try {
       final response = await dio.post(url, data: body);
       return (error: null, result: response.data);
-    } on DioError catch (e){
-      return (error: e.response?.data["detail"].toString(), result: null);
+    } on DioError catch (e) {
+      return (
+        error: e.response?.data["detail"].toString() ?? "Something went wrong",
+        result: null
+      );
     }
   }
 
-  Future<({String? error, dynamic result})> put({required String url, Map<String, dynamic>? body}) async {
+  Future<({String? error, dynamic result})> put(
+      {required String url, Map<String, dynamic>? body}) async {
     try {
       final response = await dio.put(url, data: body);
       return (error: null, result: response.data);
-    } on DioError catch (e){
-      return (error: e.response?.data["detail"].toString(), result: null);
+    } on DioError catch (e) {
+      return (
+        error: e.response?.data["detail"].toString() ?? "Something went wrong",
+        result: null
+      );
     }
   }
 
-  Future<({String? error, dynamic result})> delete({required String url, Map<String, dynamic>? body}) async {
+  Future<({String? error, dynamic result})> delete(
+      {required String url, Map<String, dynamic>? body}) async {
     try {
       final response = await dio.delete(url, data: body);
       return (error: null, result: response.data);
-    } on DioError catch (e){
-      return (error: e.response?.data["detail"].toString(), result: null);
+    } on DioError catch (e) {
+      return (
+        error: e.response?.data["detail"].toString() ?? "Something went wrong",
+        result: null
+      );
     }
   }
 
@@ -203,7 +224,10 @@ class ApiClientWithoutAuth {
       return (error: null, result: response.data);
     } on DioError catch (e) {
       log(e.toString(), name: "FIle up");
-      return (error: e.response?.data["detail"].toString(), result: null);
+      return (
+        error: e.response?.data["detail"].toString() ?? "Something went wrong",
+        result: null
+      );
     }
   }
 }

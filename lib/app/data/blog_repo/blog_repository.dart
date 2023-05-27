@@ -8,7 +8,10 @@ class BlogRepository {
     final response =
         await ApiClient.instance.get(url: 'posts/', params: queryParams);
     if (response.error != null) {
-      throw Exception(response.error);
+      return (
+        blogs: <BlogModel>[],
+        pagination: PaginationModel(),
+      );
     } else {
       final blogs = response.result['results'] as List;
       return (

@@ -36,10 +36,11 @@ class AuthController extends GetxController
     var access = Get.find<SharedPreferencesService>().getString("access");
     var refresh = Get.find<SharedPreferencesService>().getString("refresh");
     if (access != null && refresh != null) {
-      var response = await authRepository.refreshToken(refresh);
-      if (response != null) {
+      var (error: String? error, result: dynamic result) =
+          await authRepository.refreshToken(refresh);
+      if (error == null) {
         Get.find<SharedPreferencesService>()
-            .setString("access", response['access']);
+            .setString("access", result['access']);
         change(true, status: RxStatus.success());
       } else {
         change(false, status: RxStatus.success());
@@ -55,12 +56,12 @@ class AuthController extends GetxController
         'password': passwordController.text,
       });
 
-      if (response != null) {
+      if (response.error == null) {
         change(true, status: RxStatus.success());
         Get.find<SharedPreferencesService>()
-            .setString("access", response['access']);
+            .setString("access", response.result['access']);
         Get.find<SharedPreferencesService>()
-            .setString("refresh", response['refresh']);
+            .setString("refresh", response.result['refresh']);
         stateReset();
         Get.offAllNamed('/home');
       } else {
