@@ -1,4 +1,5 @@
 import 'package:blog/app/modules/auth/controllers/auth_controller.dart';
+import 'package:blog/app/modules/home/controllers/blog_controller.dart';
 import 'package:blog/app/modules/home/sections/categories_section.dart';
 import 'package:blog/app/modules/home/sections/create_blog_button.dart';
 import 'package:blog/app/modules/home/sections/filter_bottomsheet.dart';
@@ -51,12 +52,25 @@ class HomeView extends GetView<HomeController> {
           ),
         ],
       ),
-      body: const Column(
+      body: Column(
         children: [
-          SizedBox(height: 20),
-          CategoriesSection(),
-          SizedBox(height: 20),
-          PostsSection(),
+          const SizedBox(height: 20),
+          const CategoriesSection(),
+          const SizedBox(height: 20),
+          // PostsSection(),
+          GetBuilder<BlogController>(
+            init: BlogController(),
+            builder: (controller) {
+              return controller.obx(
+                (state) {
+                  return const PostsSection();
+                },
+                onError: (error) => Text(error.toString()),
+                onEmpty: const Center(child: Text('No Posts found')),
+                onLoading: const Center(child: CircularProgressIndicator()),
+              );
+            },
+          ),
         ],
       ),
       floatingActionButton: const CreateBlogButton(),

@@ -5,6 +5,7 @@ import 'package:blog/app/services/shared_preferences_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthController extends GetxController
     with GetTickerProviderStateMixin, StateMixin<bool> {
@@ -65,7 +66,9 @@ class AuthController extends GetxController
         stateReset();
         Get.offAllNamed('/home');
       } else {
-        errorLogin.value = response['detail'];
+        Get.find<SharedPreferencesService>().remove("access");
+        Get.find<SharedPreferencesService>().remove("refresh");
+        errorLogin.value = response.error;
         change(false, status: RxStatus.success());
       }
     } on Exception {
